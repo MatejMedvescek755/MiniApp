@@ -1,12 +1,17 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import Stripe from 'stripe';
+dotenv.config();
+
+const backend_port = process.env.BACKEND_PORT || 3001;
+const frontend_port = process.env.FRONTEND_PORT || 5173;
+
 
 const app = express();
-const API_KEY = process.env.STRIPE_SECRET_KEY;
-
+const API_KEY = process.env.VITE_SECRET_KEY;
+console.log(API_KEY); // Check if the key is correctly loaded
 const stripe = Stripe(API_KEY);
 
 app.use(cors());
@@ -29,14 +34,14 @@ app.post('/create-checkout-session', async (req, res) => {
                 quantity: 1,
             }],
             mode: 'payment',
-            success_url: 'http://localhost:3000/success',
-            cancel_url: 'http://localhost:3000/cancel',
+            success_url: `http://localhost:${frontend_port}/success`,
+            cancel_url: `http://localhost:${frontend_port}/cancel`,
         });
 
-        res.json({ id: session.id });
+        res.json( session.id);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(backend_port, () => console.log(`Server running on port ${backend_port}`));
