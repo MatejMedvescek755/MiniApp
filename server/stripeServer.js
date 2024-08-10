@@ -11,7 +11,7 @@ const frontend_port = process.env.FRONTEND_PORT || 5173;
 
 const app = express();
 const API_KEY = process.env.VITE_SECRET_KEY;
-console.log(API_KEY); // Check if the key is correctly loaded
+//console.log(API_KEY); // Check if the key is correctly loaded
 const stripe = Stripe(API_KEY);
 
 app.use(cors());
